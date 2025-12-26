@@ -208,12 +208,70 @@ export const DISCIPLINES: Discipline[] = [
         progress: 20,
         techniques: [
           { 
-            id: 't-w-1', 
+            id: 't-w-beg-1', 
             title: 'Stance & Motion', 
             category: 'Fundamentos',
             description: 'Postura base e movimentação sem cruzar os pés.', 
-            tips: [],
+            tips: ['Mantenha os joelhos flexionados.', 'Cabeça levantada sempre.'],
             videoUrl: 'https://www.youtube.com/results?search_query=wrestling+stance+and+motion+tutorial'
+          },
+          { 
+            id: 't-w-beg-2', 
+            title: 'Double Leg (Baiana)', 
+            category: 'Quedas',
+            description: 'Entrada nas duas pernas com postura correta.', 
+            tips: ['Mude de nível antes de entrar.', 'Cabeça na costela, não na barriga.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=wrestling+double+leg+takedown+tutorial'
+          }
+        ]
+      },
+      {
+        id: 'w-int',
+        name: 'Intermediário',
+        color: 'bg-yellow-600',
+        description: 'Defesa de quedas e ataques de perna única.',
+        progress: 0,
+        techniques: [
+          { 
+            id: 't-w-int-1', 
+            title: 'Sprawl e Go Behind', 
+            category: 'Defesa',
+            description: 'Defesa de entrada de pernas e pegada de costas.', 
+            tips: ['Quadril no chão rápido.', 'Pese em cima da cabeça do oponente.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=wrestling+sprawl+technique'
+          },
+          { 
+            id: 't-w-int-2', 
+            title: 'Single Leg High Crotch', 
+            category: 'Quedas',
+            description: 'Entrada em uma perna com cabeça por fora.', 
+            tips: ['Cotovelo fechado.', 'Gire a esquina (turn the corner).'],
+            videoUrl: 'https://www.youtube.com/results?search_query=wrestling+high+crotch+single+leg'
+          }
+        ]
+      },
+      {
+        id: 'w-adv',
+        name: 'Avançado',
+        color: 'bg-red-700',
+        description: 'Projeções de alta amplitude e cadeias de ataque.',
+        progress: 0,
+        techniques: [
+          { 
+            id: 't-w-adv-1', 
+            title: 'Suplex', 
+            category: 'Projeções',
+            description: 'Projeção de grande amplitude pelas costas.', 
+            tips: ['Explosão de quadril.', 'Arqueie as costas com segurança.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=greco+roman+suplex+tutorial'
+          },
+          { 
+            id: 't-w-adv-2', 
+            title: 'Ankle Pick', 
+            category: 'Quedas',
+            description: 'Queda técnica baixando o nível do oponente.', 
+            tips: ['Force a cabeça dele para o joelho.', 'Timing é tudo.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=wrestling+ankle+pick+tutorial'
           }
         ]
       }
@@ -235,12 +293,78 @@ export const DISCIPLINES: Discipline[] = [
         progress: 30,
         techniques: [
           { 
-            id: 't-mt-1', 
+            id: 't-mt-beg-1', 
             title: 'Jab & Direto', 
             category: 'Striking',
             description: 'Golpes retos básicos.', 
-            tips: ['Gire o quadril.', 'Proteja o queixo.'],
+            tips: ['Gire o quadril no direto.', 'Mão oposta protege o queixo.'],
             videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+jab+cross+tutorial'
+          },
+          { 
+            id: 't-mt-beg-2', 
+            title: 'Teep (Frontal)', 
+            category: 'Striking',
+            description: 'Chute frontal para controle de distância.', 
+            tips: ['Use a sola do pé (metatarso).', 'Incline o corpo levemente para trás.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+teep+technique'
+          }
+        ]
+      },
+      {
+        id: 'mt-int',
+        name: 'Intermediário',
+        color: 'bg-blue-600',
+        description: 'Clinch, joelhadas e defesas de chute.',
+        progress: 0,
+        techniques: [
+          { 
+            id: 't-mt-int-1', 
+            title: 'Clinch Tailandês (Plum)', 
+            category: 'Clinch',
+            description: 'Controle da cabeça e postura no clinch.', 
+            tips: ['Cotovelos fechados no peito do oponente.', 'Quebre a postura dele.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+clinch+basics'
+          },
+          { 
+            id: 't-mt-int-2', 
+            title: 'Bloqueio de Chute (Check)', 
+            category: 'Defesa',
+            description: 'Defesa de chute circular usando a canela.', 
+            tips: ['Joelho vai ao cotovelo.', 'Ponta do pé para cima.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+checking+kicks'
+          },
+          { 
+            id: 't-mt-int-3', 
+            title: 'Joelhada Direta', 
+            category: 'Striking',
+            description: 'Joelhada frontal penetrante.', 
+            tips: ['Projete o quadril para frente.', 'Puxe o oponente para o golpe.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+knee+technique'
+          }
+        ]
+      },
+      {
+        id: 'mt-adv',
+        name: 'Avançado',
+        color: 'bg-black',
+        description: 'Cotoveladas, giros e estratégia de combate.',
+        progress: 0,
+        techniques: [
+          { 
+            id: 't-mt-adv-1', 
+            title: 'Cotovelada Giratória', 
+            category: 'Striking',
+            description: 'Golpe surpresa girando sobre o eixo.', 
+            tips: ['Olhe antes de bater.', 'Gire rápido e recupere a base.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+spinning+elbow'
+          },
+          { 
+            id: 't-mt-adv-2', 
+            title: 'Banda (Sweep) do Clinch', 
+            category: 'Quedas',
+            description: 'Derrubar o oponente usando o desequilíbrio no clinch.', 
+            tips: ['Chute a perna de apoio quando ele se mover.', 'Gire o tronco dele.'],
+            videoUrl: 'https://www.youtube.com/results?search_query=muay+thai+clinch+sweeps'
           }
         ]
       }

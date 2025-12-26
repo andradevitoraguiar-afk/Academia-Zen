@@ -29,6 +29,12 @@ export interface Discipline {
 export interface User {
   email: string;
   name: string;
+  password?: string;
+  avatar?: string;
+  age?: string;
+  weight?: string;
+  height?: string;
+  goal?: string;
 }
 
 export interface ProgressState {

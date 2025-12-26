@@ -7,26 +7,26 @@ import { askSensei } from './services/geminiService';
 
 const BottomNavigation = ({ active, onNavigate }: { active: string, onNavigate: (view: ViewState) => void }) => {
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 pb-5 pt-2 px-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] z-30">
+    <nav className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 pb-5 pt-2 px-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] z-30 dark:bg-surface-dark dark:border-white/5">
         <div className="flex justify-between items-center max-w-md mx-auto h-16">
-            <button onClick={() => onNavigate(ViewState.DASHBOARD)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'home' ? 'text-black' : 'text-gray-400 hover:text-black'} transition-colors`}>
+            <button onClick={() => onNavigate(ViewState.DASHBOARD)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'home' ? 'text-black dark:text-white' : 'text-gray-400 hover:text-black dark:hover:text-white'} transition-colors`}>
                 <span className={`material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform ${active === 'home' ? 'filled' : ''}`}>home</span>
                 <span className="text-[10px] font-medium">Início</span>
             </button>
-            <button onClick={() => onNavigate(ViewState.SCHEDULE)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'agenda' ? 'text-black' : 'text-gray-400 hover:text-black'} transition-colors`}>
+            <button onClick={() => onNavigate(ViewState.SCHEDULE)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'agenda' ? 'text-black dark:text-white' : 'text-gray-400 hover:text-black dark:hover:text-white'} transition-colors`}>
                 <span className={`material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform ${active === 'agenda' ? 'filled' : ''}`}>calendar_month</span>
                 <span className="text-[10px] font-medium">Agenda</span>
             </button>
             <div className="relative -top-6">
-                <button onClick={() => onNavigate(ViewState.ATTENDANCE)} className="size-14 rounded-full bg-black text-white shadow-xl shadow-black/30 flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
+                <button onClick={() => onNavigate(ViewState.ATTENDANCE)} className="size-14 rounded-full bg-black text-white shadow-xl shadow-black/30 flex items-center justify-center hover:scale-105 transition-transform active:scale-95 border-4 border-white dark:border-[#1C1C1E]">
                     <span className="material-symbols-outlined text-[28px]">qr_code_scanner</span>
                 </button>
             </div>
-            <button onClick={() => onNavigate(ViewState.EVOLUTION)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'evolution' ? 'text-black' : 'text-gray-400 hover:text-black'} transition-colors`}>
+            <button onClick={() => onNavigate(ViewState.EVOLUTION)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'evolution' ? 'text-black dark:text-white' : 'text-gray-400 hover:text-black dark:hover:text-white'} transition-colors`}>
                 <span className={`material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform ${active === 'evolution' ? 'filled' : ''}`}>bar_chart</span>
                 <span className="text-[10px] font-medium">Evolução</span>
             </button>
-            <button onClick={() => onNavigate(ViewState.PROFILE)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'profile' ? 'text-black' : 'text-gray-400 hover:text-black'} transition-colors`}>
+            <button onClick={() => onNavigate(ViewState.PROFILE)} className={`flex flex-col items-center justify-center gap-1 w-12 group ${active === 'profile' ? 'text-black dark:text-white' : 'text-gray-400 hover:text-black dark:hover:text-white'} transition-colors`}>
                 <span className={`material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform ${active === 'profile' ? 'filled' : ''}`}>person</span>
                 <span className="text-[10px] font-medium">Perfil</span>
             </button>
@@ -52,27 +52,35 @@ const LoginView = ({ onLogin }: { onLogin: (u: User) => void }) => {
       return;
     }
 
-    const storedUser = localStorage.getItem(`user_${email}`);
+    const storedUserStr = localStorage.getItem(`user_${email}`);
     
     if (isRegistering) {
-      if (storedUser) {
+      if (storedUserStr) {
         setError('Usuário já existe.');
         return;
       }
-      const newUser: User = { email, name: email.split('@')[0] };
+      // Create new user with defaults
+      const newUser: User = { 
+        email, 
+        name: email.split('@')[0],
+        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg' 
+      };
+      // Save with password
       localStorage.setItem(`user_${email}`, JSON.stringify({ ...newUser, password })); 
       onLogin(newUser);
     } else {
-      if (!storedUser) {
+      if (!storedUserStr) {
         setError('Usuário não encontrado.');
         return;
       }
-      const parsed = JSON.parse(storedUser);
+      const parsed = JSON.parse(storedUserStr);
       if (parsed.password !== password) {
         setError('Senha incorreta.');
         return;
       }
-      onLogin({ email: parsed.email, name: parsed.name });
+      // Return user without password to state (security best practice simulation)
+      const { password: _, ...userWithoutPass } = parsed;
+      onLogin(userWithoutPass);
     }
   };
 
@@ -152,6 +160,154 @@ const LoginView = ({ onLogin }: { onLogin: (u: User) => void }) => {
   );
 };
 
+const OnboardingView = ({ user, onComplete }: { user: User, onComplete: (data: Partial<User>) => void }) => {
+  const [step, setStep] = useState(1);
+  const [data, setData] = useState({
+    name: user.name || '',
+    age: user.age || '',
+    weight: user.weight || '',
+    height: user.height || '',
+    goal: user.goal || ''
+  });
+
+  const goals = [
+    { id: 'defesa', icon: 'shield', label: 'Defesa Pessoal' },
+    { id: 'competicao', icon: 'trophy', label: 'Competição' },
+    { id: 'saude', icon: 'favorite', label: 'Saúde & Fitness' },
+    { id: 'mente', icon: 'self_improvement', label: 'Mente & Espírito' }
+  ];
+
+  const handleNext = () => {
+    if (step === 3) {
+      onComplete(data);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  const isStepValid = () => {
+    if (step === 1) return data.name.length > 2;
+    if (step === 2) return data.age && data.weight && data.height;
+    if (step === 3) return data.goal;
+    return false;
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white font-display flex flex-col justify-between p-6">
+      <div className="w-full max-w-md mx-auto flex-1 flex flex-col pt-10">
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-800 h-1 rounded-full mb-8">
+          <div className="bg-white h-1 rounded-full transition-all duration-500" style={{width: `${(step/3)*100}%`}}></div>
+        </div>
+
+        {/* Step 1: Identity */}
+        {step === 1 && (
+          <div className="flex-1 flex flex-col animate-fadeIn">
+            <span className="material-symbols-outlined text-5xl mb-6">badge</span>
+            <h1 className="text-3xl font-black uppercase mb-2">Quem é você, guerreiro?</h1>
+            <p className="text-gray-400 mb-8">Comece sua jornada se apresentando ao dojo.</p>
+            
+            <div className="space-y-4">
+               <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Nome Completo</label>
+                  <input 
+                    type="text" 
+                    value={data.name}
+                    onChange={(e) => setData({...data, name: e.target.value})}
+                    className="w-full bg-gray-900 border-0 border-b-2 border-gray-700 focus:border-white focus:ring-0 text-2xl font-bold px-0 py-2 transition-colors placeholder-gray-700"
+                    placeholder="Seu nome"
+                    autoFocus
+                  />
+               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Stats */}
+        {step === 2 && (
+          <div className="flex-1 flex flex-col animate-fadeIn">
+            <span className="material-symbols-outlined text-5xl mb-6">accessibility_new</span>
+            <h1 className="text-3xl font-black uppercase mb-2">Conheça seu corpo</h1>
+            <p className="text-gray-400 mb-8">Para medirmos sua evolução, precisamos saber onde você está.</p>
+            
+            <div className="space-y-6">
+               <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Idade</label>
+                  <input 
+                    type="number" 
+                    value={data.age}
+                    onChange={(e) => setData({...data, age: e.target.value})}
+                    className="w-full bg-gray-900 border-0 border-b-2 border-gray-700 focus:border-white focus:ring-0 text-2xl font-bold px-0 py-2 transition-colors placeholder-gray-700"
+                    placeholder="00"
+                  />
+               </div>
+               <div className="grid grid-cols-2 gap-6">
+                 <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Peso (kg)</label>
+                    <input 
+                      type="number" 
+                      value={data.weight}
+                      onChange={(e) => setData({...data, weight: e.target.value})}
+                      className="w-full bg-gray-900 border-0 border-b-2 border-gray-700 focus:border-white focus:ring-0 text-2xl font-bold px-0 py-2 transition-colors placeholder-gray-700"
+                      placeholder="00"
+                    />
+                 </div>
+                 <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Altura (m)</label>
+                    <input 
+                      type="text" 
+                      value={data.height}
+                      onChange={(e) => setData({...data, height: e.target.value})}
+                      className="w-full bg-gray-900 border-0 border-b-2 border-gray-700 focus:border-white focus:ring-0 text-2xl font-bold px-0 py-2 transition-colors placeholder-gray-700"
+                      placeholder="1.75"
+                    />
+                 </div>
+               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Goal */}
+        {step === 3 && (
+          <div className="flex-1 flex flex-col animate-fadeIn">
+            <span className="material-symbols-outlined text-5xl mb-6">flag</span>
+            <h1 className="text-3xl font-black uppercase mb-2">Qual é o seu caminho?</h1>
+            <p className="text-gray-400 mb-8">O que você busca dentro do Zen Jitsu?</p>
+            
+            <div className="grid grid-cols-1 gap-3">
+               {goals.map((g) => (
+                 <button
+                    key={g.id}
+                    onClick={() => setData({...data, goal: g.label})}
+                    className={`flex items-center gap-4 p-4 rounded-xl border transition-all
+                    ${data.goal === g.label 
+                      ? 'bg-white text-black border-white' 
+                      : 'bg-gray-900 text-gray-400 border-gray-800 hover:border-gray-600'}`}
+                 >
+                    <span className={`material-symbols-outlined text-2xl ${data.goal === g.label ? 'filled' : ''}`}>{g.icon}</span>
+                    <span className="font-bold text-lg">{g.label}</span>
+                 </button>
+               ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="w-full max-w-md mx-auto pt-6">
+        <button 
+          onClick={handleNext}
+          disabled={!isStepValid()}
+          className={`w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 transition-all
+          ${isStepValid() ? 'bg-white text-black hover:bg-gray-200' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}
+        >
+          {step === 3 ? 'Entrar no Dojo' : 'Próximo'}
+          <span className="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const AttendanceView = ({ progress, onNavigate, onCheckIn }: { progress: ProgressState, onNavigate: (view: ViewState) => void, onCheckIn: (date: string) => void }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -193,24 +349,24 @@ const AttendanceView = ({ progress, onNavigate, onCheckIn }: { progress: Progres
   const checkedInToday = progress.attendanceDates.includes(todayIso);
 
   return (
-    <div className="bg-white text-slate-900 font-display antialiased min-h-screen flex flex-col pb-20">
-      <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-black/5">
+    <div className="bg-white text-slate-900 font-display antialiased min-h-screen flex flex-col pb-20 dark:bg-surface-dark dark:text-white">
+      <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-black/5 dark:bg-surface-dark/90 dark:border-white/5">
         <div className="flex items-center justify-between p-4">
-          <button onClick={() => onNavigate(ViewState.DASHBOARD)} className="text-slate-900 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 transition-colors">
+          <button onClick={() => onNavigate(ViewState.DASHBOARD)} className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             <span className="material-symbols-outlined" style={{fontSize: '24px'}}>arrow_back</span>
           </button>
-          <h2 className="text-slate-900 text-lg font-bold leading-tight tracking-[-0.015em]">Frequência</h2>
+          <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Frequência</h2>
           <div className="size-10"></div>
         </div>
       </header>
-      <main className="flex-1 flex flex-col items-center w-full px-4 pt-2 pb-24 max-w-md mx-auto bg-white">
+      <main className="flex-1 flex flex-col items-center w-full px-4 pt-2 pb-24 max-w-md mx-auto bg-white dark:bg-surface-dark">
         <div className="w-full mt-4">
           <div className="flex items-center justify-between mb-6 px-2">
-            <button onClick={() => changeMonth(-1)} className="text-slate-500 hover:text-black transition-colors p-2">
+            <button onClick={() => changeMonth(-1)} className="text-slate-500 hover:text-black dark:hover:text-white transition-colors p-2">
               <span className="material-symbols-outlined">chevron_left</span>
             </button>
-            <p className="text-lg font-bold text-black">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</p>
-            <button onClick={() => changeMonth(1)} className="text-slate-500 hover:text-black transition-colors p-2">
+            <p className="text-lg font-bold text-black dark:text-white">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</p>
+            <button onClick={() => changeMonth(1)} className="text-slate-500 hover:text-black dark:hover:text-white transition-colors p-2">
               <span className="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
@@ -228,11 +384,11 @@ const AttendanceView = ({ progress, onNavigate, onCheckIn }: { progress: Progres
                   <button key={day} className={`
                     relative aspect-square flex flex-col items-center justify-center rounded-full text-sm font-bold
                     ${today ? 'bg-black text-white shadow-lg shadow-black/20' : ''}
-                    ${!today && attended ? 'bg-slate-100 text-slate-900' : ''}
-                    ${!today && !attended ? 'text-slate-700 hover:bg-black/5' : ''}
+                    ${!today && attended ? 'bg-slate-100 text-slate-900 dark:bg-white/10 dark:text-white' : ''}
+                    ${!today && !attended ? 'text-slate-700 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/5' : ''}
                   `}>
                     {day}
-                    {attended && !today && <span className="absolute bottom-1.5 w-1 h-1 bg-slate-600 rounded-full"></span>}
+                    {attended && !today && <span className="absolute bottom-1.5 w-1 h-1 bg-slate-600 dark:bg-slate-400 rounded-full"></span>}
                   </button>
                 )
               })}
@@ -241,20 +397,20 @@ const AttendanceView = ({ progress, onNavigate, onCheckIn }: { progress: Progres
         </div>
         
         <div className="w-full grid grid-cols-2 gap-4 mt-8">
-          <div className="flex flex-col gap-2 rounded-2xl p-5 border border-slate-100 bg-white shadow-sm">
-            <div className="flex items-center gap-2 text-black">
+          <div className="flex flex-col gap-2 rounded-2xl p-5 border border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm">
+            <div className="flex items-center gap-2 text-black dark:text-white">
               <span className="material-symbols-outlined text-[20px]">fitness_center</span>
               <p className="text-xs font-bold uppercase tracking-wider">Total</p>
             </div>
-            <p className="text-slate-900 tracking-tight text-3xl font-bold">{progress.attendanceDates.length}</p>
+            <p className="text-slate-900 dark:text-white tracking-tight text-3xl font-bold">{progress.attendanceDates.length}</p>
             <p className="text-xs text-slate-500 font-medium">Treinos</p>
           </div>
-          <div className="flex flex-col gap-2 rounded-2xl p-5 border border-slate-100 bg-white shadow-sm">
-            <div className="flex items-center gap-2 text-slate-700">
+          <div className="flex flex-col gap-2 rounded-2xl p-5 border border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm">
+            <div className="flex items-center gap-2 text-slate-700 dark:text-gray-300">
               <span className="material-symbols-outlined text-[20px]">local_fire_department</span>
               <p className="text-xs font-bold uppercase tracking-wider">Sequência</p>
             </div>
-            <p className="text-slate-900 tracking-tight text-3xl font-bold">--</p>
+            <p className="text-slate-900 dark:text-white tracking-tight text-3xl font-bold">--</p>
             <p className="text-xs text-slate-500 font-medium">Dias seguidos</p>
           </div>
         </div>
@@ -289,23 +445,23 @@ const ScheduleView = ({ onNavigate }: { onNavigate: (view: ViewState) => void })
   const todaySessions = WEEKLY_SCHEDULE[selectedDayIndex]?.sessions || [];
 
   return (
-    <div className="bg-background-light font-display text-black antialiased min-h-screen pb-20">
-      <header className="sticky top-0 z-20 flex items-center bg-white/95 backdrop-blur-md p-4 pb-2 justify-between border-b border-gray-100">
-        <button onClick={() => onNavigate(ViewState.DASHBOARD)} className="text-slate-900 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 transition-colors">
+    <div className="bg-background-light font-display text-black antialiased min-h-screen pb-20 dark:bg-surface-dark dark:text-white">
+      <header className="sticky top-0 z-20 flex items-center bg-white/95 dark:bg-surface-dark/95 backdrop-blur-md p-4 pb-2 justify-between border-b border-gray-100 dark:border-white/5">
+        <button onClick={() => onNavigate(ViewState.DASHBOARD)} className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             <span className="material-symbols-outlined" style={{fontSize: '24px'}}>arrow_back</span>
         </button>
-        <h2 className="text-black text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Horários</h2>
+        <h2 className="text-black dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Horários</h2>
         <div className="w-10"></div>
       </header>
       
-      <div className="sticky top-[68px] z-10 bg-white pt-2 pb-1 border-b border-gray-100">
+      <div className="sticky top-[68px] z-10 bg-white dark:bg-surface-dark pt-2 pb-1 border-b border-gray-100 dark:border-white/5">
         <div className="flex overflow-x-auto no-scrollbar px-4 gap-2 pb-2">
           {WEEKLY_SCHEDULE.map((day, idx) => (
              <button
                 key={day.day}
                 onClick={() => setSelectedDayIndex(idx)}
                 className={`flex min-w-[60px] flex-col items-center justify-center rounded-2xl py-3 px-2 transition-colors group
-                ${selectedDayIndex === idx ? 'bg-black text-white shadow-xl shadow-black/20 scale-105' : 'bg-transparent text-gray-400 hover:bg-gray-50'}`}
+                ${selectedDayIndex === idx ? 'bg-black text-white shadow-xl shadow-black/20 scale-105' : 'bg-transparent text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
              >
                <span className="text-xs font-bold opacity-70 mb-1">{day.shortDay}</span>
                {/* Mock dates for UI visual */}
@@ -316,21 +472,21 @@ const ScheduleView = ({ onNavigate }: { onNavigate: (view: ViewState) => void })
       </div>
 
       <div className="px-4 pt-6 pb-2">
-        <h2 className="text-black tracking-tight text-[28px] font-extrabold leading-tight">Treinos</h2>
+        <h2 className="text-black dark:text-white tracking-tight text-[28px] font-extrabold leading-tight">Treinos</h2>
         <p className="text-gray-500 text-sm mt-1 font-medium">{WEEKLY_SCHEDULE[selectedDayIndex].day}</p>
       </div>
 
       <div className="flex flex-col gap-4 p-4">
         {todaySessions.length === 0 ? (
-           <div className="mt-4 rounded-xl border border-dashed border-gray-300 p-6 flex flex-col items-center text-center">
-             <span className="material-symbols-outlined text-4xl text-gray-300 mb-2">fitness_center</span>
+           <div className="mt-4 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 p-6 flex flex-col items-center text-center">
+             <span className="material-symbols-outlined text-4xl text-gray-300 dark:text-gray-600 mb-2">fitness_center</span>
              <p className="text-gray-500 text-sm">Sem treinos hoje. <br/> Descanso também é treino.</p>
            </div>
         ) : (
           todaySessions.map((session, idx) => (
-            <div key={session.id} className="relative group overflow-hidden rounded-2xl bg-white border border-gray-200 p-4 shadow-sm hover:border-black transition-colors">
+            <div key={session.id} className="relative group overflow-hidden rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 p-4 shadow-sm hover:border-black dark:hover:border-white/20 transition-colors">
               <div className="flex flex-col gap-1">
-                 <h3 className="text-black text-lg font-bold leading-tight">{session.title}</h3>
+                 <h3 className="text-black dark:text-white text-lg font-bold leading-tight">{session.title}</h3>
                  <div className="flex items-center gap-1 text-gray-500 text-sm font-medium">
                     <span className="material-symbols-outlined text-[16px]">schedule</span>
                     {session.time} • {session.duration}
@@ -339,7 +495,7 @@ const ScheduleView = ({ onNavigate }: { onNavigate: (view: ViewState) => void })
                     <div className="size-6 rounded-full bg-black flex items-center justify-center text-white text-[10px] font-bold">
                         {session.instructor.charAt(0)}
                     </div>
-                    <p className="text-gray-600 text-xs font-medium">{session.instructor}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{session.instructor}</p>
                  </div>
               </div>
             </div>
@@ -351,15 +507,56 @@ const ScheduleView = ({ onNavigate }: { onNavigate: (view: ViewState) => void })
   );
 }
 
-const EvolutionView = ({ progress, onNavigate }: { progress: ProgressState, onNavigate: (view: ViewState) => void }) => {
+const EvolutionView = ({ user, progress, onNavigate }: { user: User, progress: ProgressState, onNavigate: (view: ViewState) => void }) => {
+  const [rankingData, setRankingData] = useState<any[]>([]);
   const totalTechniques = DISCIPLINES.flatMap(d => d.levels.flatMap(l => l.techniques)).length;
   const learned = progress.completedTechniques.length;
   const percentage = totalTechniques > 0 ? Math.round((learned / totalTechniques) * 100) : 0;
 
+  useEffect(() => {
+    const data = [];
+    // Iterate through localStorage to find all registered users
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('user_')) {
+            try {
+                const u = JSON.parse(localStorage.getItem(key) || '{}');
+                const email = u.email;
+                const pKey = `progress_${email}`;
+                const p = JSON.parse(localStorage.getItem(pKey) || '{"completedTechniques":[]}');
+                
+                const userLearned = p.completedTechniques ? p.completedTechniques.length : 0;
+                const userPct = totalTechniques > 0 ? Math.round((userLearned / totalTechniques) * 100) : 0;
+
+                // Simple belt logic for display based on percentage
+                let beltName = 'Faixa Branca';
+                if (userPct >= 80) beltName = 'Faixa Preta';
+                else if (userPct >= 60) beltName = 'Faixa Marrom';
+                else if (userPct >= 40) beltName = 'Faixa Roxa';
+                else if (userPct >= 20) beltName = 'Faixa Azul';
+
+                data.push({
+                    name: u.name,
+                    avatar: u.avatar || 'https://via.placeholder.com/150',
+                    percentage: userPct,
+                    belt: beltName,
+                    email: u.email
+                });
+            } catch (e) {
+                console.error("Erro ao ler dados do usuário para o ranking", e);
+            }
+        }
+    }
+    
+    // Sort by percentage descending
+    data.sort((a, b) => b.percentage - a.percentage);
+    setRankingData(data);
+  }, [progress, totalTechniques]);
+
   return (
-    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black pb-24">
-       <header className="sticky top-0 z-20 flex items-center bg-white/95 backdrop-blur-md p-4 justify-between border-b border-gray-100">
-         <h1 className="text-black text-xl font-bold tracking-tight">Evolução</h1>
+    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black pb-24 dark:bg-surface-dark dark:text-white">
+       <header className="sticky top-0 z-20 flex items-center bg-white/95 dark:bg-surface-dark/95 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-white/5">
+         <h1 className="text-black dark:text-white text-xl font-bold tracking-tight">Evolução</h1>
          <div className="size-8 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">Z</div>
        </header>
 
@@ -382,20 +579,53 @@ const EvolutionView = ({ progress, onNavigate }: { progress: ProgressState, onNa
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-             <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+             <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 border border-gray-100 dark:border-white/5">
                 <div className="flex items-center gap-2 mb-2 text-gray-500">
                    <span className="material-symbols-outlined text-xl">school</span>
                    <span className="text-xs font-bold uppercase">Aprendidas</span>
                 </div>
-                <p className="text-2xl font-bold text-black">{learned}</p>
+                <p className="text-2xl font-bold text-black dark:text-white">{learned}</p>
              </div>
-             <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+             <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 border border-gray-100 dark:border-white/5">
                 <div className="flex items-center gap-2 mb-2 text-gray-500">
                    <span className="material-symbols-outlined text-xl">history</span>
                    <span className="text-xs font-bold uppercase">Treinos</span>
                 </div>
-                <p className="text-2xl font-bold text-black">{progress.attendanceDates.length}</p>
+                <p className="text-2xl font-bold text-black dark:text-white">{progress.attendanceDates.length}</p>
              </div>
+          </div>
+
+          {/* Ranking Section */}
+          <div>
+            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <span className="material-symbols-outlined text-yellow-500 filled">trophy</span>
+                Ranking do Dojo
+            </h3>
+            {rankingData.length === 0 ? (
+                <div className="text-center p-4 text-gray-500 text-sm">Nenhum guerreiro encontrado.</div>
+            ) : (
+                <div className="flex flex-col gap-3">
+                    {rankingData.map((rUser, index) => {
+                        const isMe = rUser.email === user.email;
+                        return (
+                            <div key={index} className={`p-3 rounded-xl flex items-center gap-3 border transition-colors ${isMe ? 'bg-black text-white border-black' : 'bg-white dark:bg-white/5 border-gray-100 dark:border-white/5 text-black dark:text-white'}`}>
+                                <div className="w-6 text-center font-bold text-sm opacity-50">#{index + 1}</div>
+                                <div className="size-10 rounded-full bg-cover bg-center border border-gray-200 dark:border-white/10" style={{backgroundImage: `url("${rUser.avatar}")`}}></div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <p className="font-bold text-sm truncate">{rUser.name} {isMe && '(Você)'}</p>
+                                        <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${isMe ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400'}`}>{rUser.belt}</span>
+                                    </div>
+                                    <div className={`w-full h-1.5 rounded-full overflow-hidden ${isMe ? 'bg-gray-700' : 'bg-gray-100 dark:bg-white/10'}`}>
+                                        <div className={`h-full rounded-full ${isMe ? 'bg-green-400' : 'bg-black dark:bg-white'}`} style={{width: `${rUser.percentage}%`}}></div>
+                                    </div>
+                                </div>
+                                <div className="font-bold text-sm w-8 text-right">{rUser.percentage}%</div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
           </div>
 
           <div>
@@ -407,13 +637,13 @@ const EvolutionView = ({ progress, onNavigate }: { progress: ProgressState, onNa
                    const dPct = dTechs.length > 0 ? Math.round((dCompleted / dTechs.length) * 100) : 0;
                    
                    return (
-                      <div key={d.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+                      <div key={d.id} className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-xl p-4 shadow-sm">
                          <div className="flex justify-between items-center mb-2">
                             <h4 className="font-bold">{d.name}</h4>
-                            <span className="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-600">{dPct}%</span>
+                            <span className="text-xs font-bold bg-gray-100 dark:bg-white/10 px-2 py-1 rounded text-gray-600 dark:text-gray-300">{dPct}%</span>
                          </div>
-                         <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                            <div className="bg-black h-2 rounded-full" style={{width: `${dPct}%`}}></div>
+                         <div className="w-full bg-gray-100 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+                            <div className="bg-black dark:bg-white h-2 rounded-full" style={{width: `${dPct}%`}}></div>
                          </div>
                       </div>
                    )
@@ -426,67 +656,302 @@ const EvolutionView = ({ progress, onNavigate }: { progress: ProgressState, onNa
   )
 }
 
-const ProfileView = ({ user, onLogout, onNavigate }: { user: User, onLogout: () => void, onNavigate: (view: ViewState) => void }) => {
+const ProfileView = ({ user, onLogout, onNavigate, onUpdateUser }: { user: User, onLogout: () => void, onNavigate: (view: ViewState) => void, onUpdateUser: (u: Partial<User>) => void }) => {
+  const [subView, setSubView] = useState<'main' | 'edit' | 'history' | 'settings'>('main');
+  const [formData, setFormData] = useState({
+    name: user.name,
+    age: user.age || '',
+    weight: user.weight || '',
+    height: user.height || '',
+    avatar: user.avatar || ''
+  });
+
+  // Settings State
+  const [settings, setSettings] = useState({
+    notifications: true,
+    publicProfile: false,
+    darkMode: document.documentElement.classList.contains('dark')
+  });
+
+  const toggleTheme = () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    setSettings(prev => ({ ...prev, darkMode: isDark }));
+  };
+
+  const toggleSetting = (key: 'notifications' | 'publicProfile') => {
+    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const resetProgress = () => {
+    if (confirm('Atenção! Isso apagará todo o seu progresso de técnicas e frequência. Esta ação não pode ser desfeita.')) {
+        localStorage.removeItem(`progress_${user.email}`);
+        window.location.reload();
+    }
+  };
+
+  const handleSave = () => {
+    onUpdateUser(formData);
+    setSubView('main');
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  if (subView === 'edit') {
+    return (
+      <div className="bg-white dark:bg-surface-dark min-h-screen text-black dark:text-white font-display antialiased flex flex-col">
+        <header className="sticky top-0 z-20 flex items-center bg-white/95 dark:bg-surface-dark/95 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-white/5">
+           <button onClick={() => setSubView('main')} className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+              <span className="material-symbols-outlined">arrow_back</span>
+           </button>
+           <h2 className="text-black dark:text-white text-lg font-bold">Editar Perfil</h2>
+           <div className="w-10"></div>
+        </header>
+        <main className="p-6 flex-1 overflow-y-auto pb-24">
+           <div className="flex flex-col items-center mb-8">
+              <div className="size-24 rounded-full border-4 border-gray-100 dark:border-white/10 shadow-lg bg-gray-200 flex items-center justify-center bg-cover bg-center mb-4" style={{backgroundImage: `url("${formData.avatar || 'https://via.placeholder.com/150'}")`}}>
+              </div>
+              <p className="text-xs text-gray-500">Cole a URL da imagem abaixo</p>
+           </div>
+
+           <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-black dark:text-white mb-1">Nome Completo</label>
+                <input name="name" value={formData.name} onChange={handleChange} className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-white/5 px-4 py-3 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black dark:focus:ring-white transition-colors" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-black dark:text-white mb-1">URL do Avatar (Imagem)</label>
+                <input name="avatar" value={formData.avatar} onChange={handleChange} placeholder="https://..." className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-white/5 px-4 py-3 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black dark:focus:ring-white transition-colors" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                 <div>
+                    <label className="block text-sm font-bold text-black dark:text-white mb-1">Idade</label>
+                    <input name="age" type="number" value={formData.age} onChange={handleChange} placeholder="Anos" className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-white/5 px-4 py-3 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black dark:focus:ring-white transition-colors" />
+                 </div>
+                 <div>
+                    <label className="block text-sm font-bold text-black dark:text-white mb-1">Peso (kg)</label>
+                    <input name="weight" type="number" value={formData.weight} onChange={handleChange} placeholder="kg" className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-white/5 px-4 py-3 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black dark:focus:ring-white transition-colors" />
+                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-black dark:text-white mb-1">Altura (m)</label>
+                <input name="height" type="text" value={formData.height} onChange={handleChange} placeholder="1.75" className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-white/5 px-4 py-3 focus:outline-none focus:border-black dark:focus:border-white focus:ring-1 focus:ring-black dark:focus:ring-white transition-colors" />
+              </div>
+           </div>
+
+           <button onClick={handleSave} className="w-full mt-8 bg-black dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl shadow-lg shadow-black/20 hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95">
+              Salvar Alterações
+           </button>
+        </main>
+      </div>
+    )
+  }
+
+  if (subView === 'history') {
+    const belts = [
+        { name: 'Faixa Branca', color: 'bg-white border-2 border-gray-200', active: true, date: '10 Jan, 2024', status: 'Concluído' },
+        { name: 'Faixa Azul', color: 'bg-blue-600 border-2 border-blue-600', active: false, date: 'Em progresso', status: 'Próximo Objetivo' },
+        { name: 'Faixa Roxa', color: 'bg-purple-600 border-2 border-purple-600', active: false, date: 'Bloqueado', status: 'Futuro' },
+        { name: 'Faixa Marrom', color: 'bg-[#5d4037] border-2 border-[#5d4037]', active: false, date: 'Bloqueado', status: 'Futuro' },
+        { name: 'Faixa Preta', color: 'bg-black border-2 border-black', active: false, date: 'Bloqueado', status: 'Mestre' }
+    ];
+
+    return (
+        <div className="bg-white dark:bg-surface-dark min-h-screen text-black dark:text-white font-display antialiased flex flex-col">
+            <header className="sticky top-0 z-20 flex items-center bg-white/95 dark:bg-surface-dark/95 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-white/5">
+                <button onClick={() => setSubView('main')} className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                    <span className="material-symbols-outlined">arrow_back</span>
+                </button>
+                <h2 className="text-black dark:text-white text-lg font-bold">Histórico de Graduação</h2>
+                <div className="w-10"></div>
+            </header>
+            <main className="p-6 flex-1 overflow-y-auto pb-24 relative">
+                <div className="absolute left-[39px] top-6 bottom-6 w-0.5 bg-gray-100 dark:bg-white/10 z-0"></div>
+                <div className="space-y-8 relative z-10">
+                    {belts.map((belt, index) => (
+                        <div key={index} className={`flex gap-4 ${!belt.active && index !== 1 ? 'opacity-50' : ''}`}>
+                             <div className={`size-8 rounded-full shrink-0 flex items-center justify-center shadow-sm ${belt.color}`}>
+                                {belt.active && <span className="material-symbols-outlined text-[16px] text-black">check</span>}
+                             </div>
+                             <div className="flex-1 pt-1">
+                                 <h3 className="font-bold text-lg leading-none mb-1">{belt.name}</h3>
+                                 <div className="flex items-center gap-2 mb-1">
+                                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${belt.active ? 'bg-black text-white' : 'bg-gray-100 dark:bg-white/10 text-gray-500'}`}>{belt.status}</span>
+                                 </div>
+                                 <p className="text-sm text-gray-500">{belt.date}</p>
+                             </div>
+                        </div>
+                    ))}
+                </div>
+            </main>
+        </div>
+    )
+  }
+
+  if (subView === 'settings') {
+    return (
+        <div className="bg-white dark:bg-surface-dark min-h-screen text-black dark:text-white font-display antialiased flex flex-col">
+            <header className="sticky top-0 z-20 flex items-center bg-white/95 dark:bg-surface-dark/95 backdrop-blur-md p-4 justify-between border-b border-gray-100 dark:border-white/5">
+                <button onClick={() => setSubView('main')} className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                    <span className="material-symbols-outlined">arrow_back</span>
+                </button>
+                <h2 className="text-black dark:text-white text-lg font-bold">Configurações</h2>
+                <div className="w-10"></div>
+            </header>
+            <main className="p-6 flex-1 overflow-y-auto pb-24">
+                <div className="space-y-8">
+                    {/* Appearance Section */}
+                    <section>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Aparência</h3>
+                        <div className="bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 overflow-hidden">
+                            <div className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-8 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black">
+                                        <span className="material-symbols-outlined text-[18px]">dark_mode</span>
+                                    </div>
+                                    <span className="font-bold">Modo Escuro</span>
+                                </div>
+                                <button 
+                                    onClick={toggleTheme}
+                                    className={`w-12 h-7 rounded-full p-1 transition-colors duration-200 ${settings.darkMode ? 'bg-black dark:bg-white' : 'bg-gray-300'}`}
+                                >
+                                    <div className={`size-5 bg-white dark:bg-black rounded-full shadow-sm transition-transform duration-200 ${settings.darkMode ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Notifications Section */}
+                    <section>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Notificações</h3>
+                        <div className="bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 overflow-hidden divide-y divide-gray-100 dark:divide-white/5">
+                            <div className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-8 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-black dark:text-white">
+                                        <span className="material-symbols-outlined text-[18px]">notifications</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold">Lembretes de Treino</span>
+                                        <span className="text-xs text-gray-500">Notificar 1h antes da aula</span>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => toggleSetting('notifications')}
+                                    className={`w-12 h-7 rounded-full p-1 transition-colors duration-200 ${settings.notifications ? 'bg-black dark:bg-white' : 'bg-gray-300'}`}
+                                >
+                                    <div className={`size-5 bg-white dark:bg-black rounded-full shadow-sm transition-transform duration-200 ${settings.notifications ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Privacy Section */}
+                    <section>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Privacidade</h3>
+                        <div className="bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5 overflow-hidden">
+                            <div className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-8 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-black dark:text-white">
+                                        <span className="material-symbols-outlined text-[18px]">public</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold">Perfil Público</span>
+                                        <span className="text-xs text-gray-500">Permitir que outros vejam seu ranking</span>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => toggleSetting('publicProfile')}
+                                    className={`w-12 h-7 rounded-full p-1 transition-colors duration-200 ${settings.publicProfile ? 'bg-black dark:bg-white' : 'bg-gray-300'}`}
+                                >
+                                    <div className={`size-5 bg-white dark:bg-black rounded-full shadow-sm transition-transform duration-200 ${settings.publicProfile ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Data Management */}
+                    <section>
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Dados</h3>
+                        <button onClick={resetProgress} className="w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl p-4 flex items-center justify-between border border-red-100 dark:border-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors">
+                            <span className="font-bold">Resetar Todo o Progresso</span>
+                            <span className="material-symbols-outlined">delete_forever</span>
+                        </button>
+                        <p className="text-xs text-gray-400 mt-2 text-center">Isso irá apagar seu histórico de check-ins e técnicas.</p>
+                    </section>
+                </div>
+            </main>
+        </div>
+    )
+  }
+
   return (
-    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black pb-24">
-       <div className="relative bg-black text-white pt-10 pb-16 px-6 rounded-b-[2.5rem] shadow-xl shadow-black/10 overflow-hidden">
+    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black pb-24 dark:bg-surface-dark dark:text-white">
+       <div className="relative bg-black dark:bg-[#1C1C1E] text-white pt-10 pb-16 px-6 rounded-b-[2.5rem] shadow-xl shadow-black/10 overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="relative z-10 flex flex-col items-center text-center">
-             <div className="size-24 rounded-full border-4 border-white shadow-lg bg-gray-800 flex items-center justify-center text-4xl font-bold mb-4 bg-cover bg-center" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg")'}}>
+             <div className="size-24 rounded-full border-4 border-white shadow-lg bg-gray-800 flex items-center justify-center text-4xl font-bold mb-4 bg-cover bg-center" style={{backgroundImage: `url("${user.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg'}")`}}>
              </div>
              <h2 className="text-2xl font-bold">{user.name}</h2>
              <p className="text-gray-400 text-sm mt-1">{user.email}</p>
              <div className="mt-4 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wider border border-white/10">
                 Faixa Branca • 1º Grau
              </div>
+             <div className="mt-6 grid grid-cols-3 gap-8 w-full max-w-xs border-t border-white/10 pt-4">
+                <div>
+                   <span className="block text-lg font-bold">{user.age || '--'}</span>
+                   <span className="text-[10px] text-gray-400 uppercase tracking-wider">Anos</span>
+                </div>
+                <div>
+                   <span className="block text-lg font-bold">{user.weight || '--'}</span>
+                   <span className="text-[10px] text-gray-400 uppercase tracking-wider">kg</span>
+                </div>
+                <div>
+                   <span className="block text-lg font-bold">{user.height || '--'}</span>
+                   <span className="text-[10px] text-gray-400 uppercase tracking-wider">m</span>
+                </div>
+             </div>
           </div>
        </div>
 
        <main className="flex-1 p-6 -mt-8 relative z-20">
-          <div className="bg-white rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 overflow-hidden">
-             <button className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <div className="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600">
+          <div className="bg-white dark:bg-[#2C2C2E] rounded-2xl shadow-lg shadow-gray-100 dark:shadow-none border border-gray-100 dark:border-white/5 overflow-hidden">
+             <button onClick={() => setSubView('edit')} className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/5">
+                <div className="size-10 rounded-full bg-gray-50 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300">
                    <span className="material-symbols-outlined">person</span>
                 </div>
                 <div className="flex-1 text-left">
                    <h4 className="font-bold text-sm">Dados Pessoais</h4>
-                   <p className="text-xs text-gray-500">Editar informações</p>
+                   <p className="text-xs text-gray-500 dark:text-gray-400">Editar nome, foto, medidas</p>
                 </div>
                 <span className="material-symbols-outlined text-gray-400">chevron_right</span>
              </button>
-             <button className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <div className="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600">
+             <button onClick={() => setSubView('history')} className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/5">
+                <div className="size-10 rounded-full bg-gray-50 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300">
                    <span className="material-symbols-outlined">school</span>
                 </div>
                 <div className="flex-1 text-left">
                    <h4 className="font-bold text-sm">Histórico de Graduação</h4>
-                   <p className="text-xs text-gray-500">Minhas faixas</p>
+                   <p className="text-xs text-gray-500 dark:text-gray-400">Minhas faixas</p>
                 </div>
                 <span className="material-symbols-outlined text-gray-400">chevron_right</span>
              </button>
-             <button className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <div className="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600">
+             <button onClick={() => setSubView('settings')} className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/5">
+                <div className="size-10 rounded-full bg-gray-50 dark:bg-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300">
                    <span className="material-symbols-outlined">settings</span>
                 </div>
                 <div className="flex-1 text-left">
                    <h4 className="font-bold text-sm">Configurações</h4>
-                   <p className="text-xs text-gray-500">Notificações e app</p>
-                </div>
-                <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-             </button>
-             <button className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors">
-                <div className="size-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600">
-                   <span className="material-symbols-outlined">help</span>
-                </div>
-                <div className="flex-1 text-left">
-                   <h4 className="font-bold text-sm">Ajuda & Suporte</h4>
-                   <p className="text-xs text-gray-500">Fale conosco</p>
+                   <p className="text-xs text-gray-500 dark:text-gray-400">Notificações e app</p>
                 </div>
                 <span className="material-symbols-outlined text-gray-400">chevron_right</span>
              </button>
           </div>
 
-          <button onClick={onLogout} className="w-full mt-6 flex items-center justify-center gap-2 p-4 rounded-xl bg-gray-50 text-red-500 font-bold hover:bg-red-50 transition-colors">
+          <button onClick={onLogout} className="w-full mt-6 flex items-center justify-center gap-2 p-4 rounded-xl bg-gray-50 dark:bg-white/5 text-red-500 font-bold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
              <span className="material-symbols-outlined">logout</span>
              Sair da conta
           </button>
@@ -498,41 +963,41 @@ const ProfileView = ({ user, onLogout, onNavigate }: { user: User, onLogout: () 
 
 const DisciplineView = ({ discipline, progress, onBack, onSelectLevel }: any) => {
   return (
-    <div className="bg-white text-black font-display antialiased pb-24 min-h-screen">
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-black px-4 h-14 flex items-center justify-between">
-        <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    <div className="bg-white text-black font-display antialiased pb-24 min-h-screen dark:bg-surface-dark dark:text-white">
+      <div className="sticky top-0 z-50 bg-white/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b border-black dark:border-white/10 px-4 h-14 flex items-center justify-between">
+        <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
           <span className="material-symbols-outlined text-2xl">arrow_back</span>
         </button>
         <span className="font-bold text-sm tracking-widest uppercase">Zen Jitsu</span>
         <div className="w-10"></div>
       </div>
       
-      <div className="w-full h-48 relative border-b border-black overflow-hidden bg-gray-100">
+      <div className="w-full h-48 relative border-b border-black dark:border-white/10 overflow-hidden bg-gray-100">
         <img alt="Training" className="w-full h-full object-cover grayscale contrast-125" src={discipline.imageUrl} />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent dark:from-surface-dark dark:via-surface-dark/20"></div>
         <div className="absolute bottom-0 left-0 p-5 w-full">
           <span className="bg-black text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-wide mb-2 inline-block">Disciplina</span>
-          <h1 className="text-3xl font-black uppercase tracking-tight leading-none text-black drop-shadow-sm">{discipline.name}</h1>
+          <h1 className="text-3xl font-black uppercase tracking-tight leading-none text-black dark:text-white drop-shadow-sm">{discipline.name}</h1>
         </div>
       </div>
 
       <div className="px-5 py-6 flex flex-col gap-6">
-        <p className="text-sm text-gray-700 leading-relaxed border-l-[3px] border-black pl-4 font-medium">
+        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed border-l-[3px] border-black dark:border-white pl-4 font-medium">
            {discipline.description}
         </p>
         
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-surface border border-gray-200 rounded-lg p-3 text-center flex flex-col gap-1">
+          <div className="bg-surface border border-gray-200 dark:border-white/10 dark:bg-white/5 rounded-lg p-3 text-center flex flex-col gap-1">
             <span className="block text-xl font-black">{discipline.levels.reduce((acc: number, l: any) => acc + l.techniques.length, 0)}</span>
-            <span className="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Técnicas</span>
+            <span className="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">Técnicas</span>
           </div>
-          <div className="bg-surface border border-gray-200 rounded-lg p-3 text-center flex flex-col gap-1">
+          <div className="bg-surface border border-gray-200 dark:border-white/10 dark:bg-white/5 rounded-lg p-3 text-center flex flex-col gap-1">
             <span className="block text-xl font-black">{discipline.levels.length}</span>
-            <span className="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Níveis</span>
+            <span className="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">Níveis</span>
           </div>
-          <div className="bg-surface border border-gray-200 rounded-lg p-3 text-center flex flex-col gap-1">
+          <div className="bg-surface border border-gray-200 dark:border-white/10 dark:bg-white/5 rounded-lg p-3 text-center flex flex-col gap-1">
             <span className="block text-xl font-black">--</span>
-            <span className="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Horas</span>
+            <span className="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold tracking-wider">Horas</span>
           </div>
         </div>
       </div>
@@ -546,7 +1011,7 @@ const DisciplineView = ({ discipline, progress, onBack, onSelectLevel }: any) =>
         </div>
         
         <div className="space-y-4 relative">
-          <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gray-200 -z-10"></div>
+          <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gray-200 dark:bg-white/10 -z-10"></div>
           
           {discipline.levels.map((level: Level) => {
              const allTechs = level.techniques.length;
@@ -556,20 +1021,20 @@ const DisciplineView = ({ discipline, progress, onBack, onSelectLevel }: any) =>
              return (
                <div key={level.id} onClick={() => onSelectLevel(level)} className="cursor-pointer">
                   {/* Active/Unlocked look */}
-                   <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden z-10 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+                   <div className="bg-white dark:bg-surface-dark border-2 border-black dark:border-white rounded-xl p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] relative overflow-hidden z-10 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] transition-all">
                      <div className="flex gap-4">
-                       <div className="w-14 h-14 bg-gray-50 border-2 border-black rounded-lg flex items-center justify-center shrink-0">
+                       <div className="w-14 h-14 bg-gray-50 dark:bg-white/10 border-2 border-black dark:border-white rounded-lg flex items-center justify-center shrink-0">
                          <div className={`w-10 h-2 ${level.color} border border-gray-300 shadow-sm`}></div>
                        </div>
                        <div className="flex-1 pt-1 z-10">
                          <h3 className="font-bold text-lg leading-none mb-1">{level.name}</h3>
-                         <p className="text-xs text-gray-500 mb-3 font-medium">{level.description}</p>
+                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 font-medium">{level.description}</p>
                          <div className="flex items-center justify-between text-xs font-bold mb-1">
                            <span>Progresso</span>
                            <span>{pct}%</span>
                          </div>
-                         <div className="w-full h-3 bg-gray-100 rounded-full border border-black overflow-hidden">
-                           <div className="h-full bg-black transition-all duration-500" style={{width: `${pct}%`}}></div>
+                         <div className="w-full h-3 bg-gray-100 dark:bg-white/10 rounded-full border border-black dark:border-white overflow-hidden">
+                           <div className="h-full bg-black dark:bg-white transition-all duration-500" style={{width: `${pct}%`}}></div>
                          </div>
                        </div>
                      </div>
@@ -678,25 +1143,25 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
             <div className="py-6">
                 <div className="flex items-end justify-between mb-2">
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Progresso do Nível</p>
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Progresso do Nível</p>
                         <h2 className="text-2xl font-bold mt-1">{completed}<span className="text-gray-400">/{allTechs}</span> <span className="text-base font-normal text-gray-500">Técnicas</span></h2>
                     </div>
-                    <div className="bg-black text-white px-3 py-1 rounded-full border border-black">
+                    <div className="bg-black dark:bg-white text-white dark:text-black px-3 py-1 rounded-full border border-black dark:border-white">
                         <span className="font-bold text-sm">{pct}%</span>
                     </div>
                 </div>
-                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-black rounded-full" style={{width: `${pct}%`}}></div>
+                <div className="h-2 w-full bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-black dark:bg-white rounded-full" style={{width: `${pct}%`}}></div>
                 </div>
             </div>
 
             <div className="mb-6">
                 <div className="relative group">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 group-focus-within:text-black transition-colors">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">
                         <span className="material-symbols-outlined">search</span>
                     </span>
                     <input 
-                        className="w-full bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3C3C3E] rounded-xl py-3.5 pl-12 pr-4 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all shadow-sm" 
+                        className="w-full bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3C3C3E] rounded-xl py-3.5 pl-12 pr-4 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/10 dark:focus:ring-white/20 focus:border-black dark:focus:border-white transition-all shadow-sm" 
                         placeholder="Buscar técnica (ex: Armlock)" 
                         type="text"
                         value={search}
@@ -712,8 +1177,8 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
                         onClick={() => setFilter(cat)}
                         className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-colors
                         ${filter === cat 
-                            ? 'bg-black text-white' 
-                            : 'bg-white border border-gray-200 text-gray-600 hover:border-black'}`}
+                            ? 'bg-black text-white dark:bg-white dark:text-black' 
+                            : 'bg-white border border-gray-200 text-gray-600 hover:border-black dark:bg-white/5 dark:border-white/10 dark:text-gray-400 dark:hover:border-white/30'}`}
                     >
                         {cat}
                     </button>
@@ -724,7 +1189,7 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
                 {filteredTechniques.map((tech: Technique) => {
                     const isCompleted = progress.completedTechniques.includes(tech.id);
                     return (
-                        <div key={tech.id} className="group relative bg-white dark:bg-[#1C1C1E] rounded-xl p-4 border border-gray-200 dark:border-[#2C2C2E] shadow-sm hover:border-black/30 transition-all duration-300">
+                        <div key={tech.id} className="group relative bg-white dark:bg-[#1C1C1E] rounded-xl p-4 border border-gray-200 dark:border-[#2C2C2E] shadow-sm hover:border-black/30 dark:hover:border-white/30 transition-all duration-300">
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
@@ -735,7 +1200,7 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
                                     <div className="mt-4 flex items-center gap-3">
                                         <button 
                                             onClick={() => handleAskSensei(tech)}
-                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black text-white hover:bg-gray-800 text-xs font-bold transition-colors"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 text-xs font-bold transition-colors"
                                         >
                                             <span className="material-symbols-outlined filled text-[16px]">smart_toy</span>
                                             Sensei AI
@@ -758,9 +1223,9 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
                                     <button 
                                         onClick={() => onToggleTechnique(tech.id)}
                                         className={`w-8 h-8 border-2 rounded-lg transition-all flex items-center justify-center
-                                        ${isCompleted ? 'bg-black border-black' : 'border-gray-300 hover:border-black'}`}
+                                        ${isCompleted ? 'bg-black border-black dark:bg-white dark:border-white' : 'border-gray-300 hover:border-black dark:border-gray-600 dark:hover:border-white'}`}
                                     >
-                                        <span className={`material-symbols-outlined text-white text-[20px] transition-all duration-200 ${isCompleted ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>check</span>
+                                        <span className={`material-symbols-outlined text-white dark:text-black text-[20px] transition-all duration-200 ${isCompleted ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>check</span>
                                     </button>
                                 </div>
                             </div>
@@ -775,17 +1240,17 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
 
 const Dashboard = ({ user, progress, onSelectDiscipline, onNavigate, onLogout }: any) => {
   return (
-    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black">
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 transition-colors">
+    <div className="bg-background-light font-display min-h-screen flex flex-col antialiased text-black dark:bg-surface-dark dark:text-white">
+      <header className="sticky top-0 z-50 bg-white/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b border-gray-100 dark:border-white/5 transition-colors">
         <div className="px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-                <div className="size-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-black/10">
+                <div className="size-10 bg-black dark:bg-white rounded-lg flex items-center justify-center text-white dark:text-black font-bold text-xl shadow-lg shadow-black/10">
                     Z
                 </div>
-                <h1 className="text-black text-lg font-bold tracking-tight">Zen Jitsu</h1>
+                <h1 className="text-black dark:text-white text-lg font-bold tracking-tight">Zen Jitsu</h1>
             </div>
             <div className="flex items-center gap-2">
-                <button onClick={onLogout} className="relative p-2 text-gray-500 hover:text-black transition-colors rounded-full hover:bg-gray-50">
+                <button onClick={onLogout} className="relative p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors rounded-full hover:bg-gray-50 dark:hover:bg-white/10">
                     <span className="material-symbols-outlined text-[24px]">logout</span>
                 </button>
             </div>
@@ -796,48 +1261,48 @@ const Dashboard = ({ user, progress, onSelectDiscipline, onNavigate, onLogout }:
         <section className="p-5 pb-2">
             <div className="flex items-center gap-4 mb-8">
                 <div className="relative group cursor-pointer" onClick={() => onNavigate(ViewState.PROFILE)}>
-                    <div className="size-16 rounded-full bg-cover bg-center border-2 border-black p-0.5" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg")'}}></div>
-                    <div className="absolute bottom-0 right-0 size-5 bg-black border-2 border-white rounded-full flex items-center justify-center">
-                        <div className="size-2 bg-white rounded-full"></div>
+                    <div className="size-16 rounded-full bg-cover bg-center border-2 border-black dark:border-white p-0.5" style={{backgroundImage: `url("${user.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg'}")`}}></div>
+                    <div className="absolute bottom-0 right-0 size-5 bg-black dark:bg-white border-2 border-white dark:border-[#1C1C1E] rounded-full flex items-center justify-center">
+                        <div className="size-2 bg-white dark:bg-black rounded-full"></div>
                     </div>
                 </div>
                 <div className="flex flex-col">
-                    <h2 className="text-black text-2xl font-bold leading-tight">Olá, {user.name}</h2>
-                    <span className="text-gray-600 font-medium text-sm tracking-wide uppercase">Faixa Branca • 1º Grau</span>
+                    <h2 className="text-black dark:text-white text-2xl font-bold leading-tight">Olá, {user.name}</h2>
+                    <span className="text-gray-600 dark:text-gray-400 font-medium text-sm tracking-wide uppercase">Faixa Branca • 1º Grau</span>
                 </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4 mb-8">
-                <div onClick={() => onNavigate(ViewState.EVOLUTION)} className="bg-card-gray p-5 rounded-xl flex flex-col justify-between h-36 border border-transparent hover:border-black/10 transition-colors group relative overflow-hidden cursor-pointer">
+                <div onClick={() => onNavigate(ViewState.EVOLUTION)} className="bg-card-gray dark:bg-white/5 p-5 rounded-xl flex flex-col justify-between h-36 border border-transparent hover:border-black/10 dark:hover:border-white/20 transition-colors group relative overflow-hidden cursor-pointer">
                     <div className="flex justify-between items-start z-10">
-                        <div className="p-2 bg-white rounded-lg shadow-sm group-hover:bg-black group-hover:text-white transition-colors text-black">
+                        <div className="p-2 bg-white dark:bg-white/10 rounded-lg shadow-sm group-hover:bg-black dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-colors text-black dark:text-white">
                             <span className="material-symbols-outlined">bar_chart</span>
                         </div>
-                        <span className="text-xs font-bold text-black bg-white px-2 py-1 rounded-full shadow-sm">Ver</span>
+                        <span className="text-xs font-bold text-black dark:text-white bg-white dark:bg-white/10 px-2 py-1 rounded-full shadow-sm">Ver</span>
                     </div>
                     <div className="z-10">
-                        <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Técnicas</p>
-                        <p className="text-black text-3xl font-extrabold tracking-tight">{progress.completedTechniques.length}</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Técnicas</p>
+                        <p className="text-black dark:text-white text-3xl font-extrabold tracking-tight">{progress.completedTechniques.length}</p>
                     </div>
                 </div>
                 
-                <div onClick={() => onNavigate(ViewState.SCHEDULE)} className="bg-black p-5 rounded-xl shadow-xl shadow-black/10 flex flex-col justify-between h-36 relative overflow-hidden cursor-pointer">
-                    <div className="absolute -right-6 -top-6 size-32 bg-gray-800 rounded-full blur-3xl opacity-50"></div>
+                <div onClick={() => onNavigate(ViewState.SCHEDULE)} className="bg-black dark:bg-white p-5 rounded-xl shadow-xl shadow-black/10 flex flex-col justify-between h-36 relative overflow-hidden cursor-pointer group">
+                    <div className="absolute -right-6 -top-6 size-32 bg-gray-800 dark:bg-gray-200 rounded-full blur-3xl opacity-50"></div>
                     <div className="flex justify-between items-start z-10">
-                        <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm text-white">
+                        <div className="p-2 bg-white/20 dark:bg-black/10 rounded-lg backdrop-blur-sm text-white dark:text-black">
                             <span className="material-symbols-outlined">schedule</span>
                         </div>
                     </div>
                     <div className="z-10">
-                        <p className="text-gray-300 text-xs font-bold uppercase tracking-wider mb-1">Próxima Aula</p>
-                        <p className="text-white text-xl font-bold leading-tight">Hoje, 19:30</p>
+                        <p className="text-gray-300 dark:text-gray-600 text-xs font-bold uppercase tracking-wider mb-1">Próxima Aula</p>
+                        <p className="text-white dark:text-black text-xl font-bold leading-tight">Hoje, 19:30</p>
                     </div>
                 </div>
             </div>
 
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-black text-xl font-bold">Minhas Disciplinas</h3>
-                <button className="text-sm font-semibold text-gray-500 hover:text-black transition-colors">Ver todas</button>
+                <h3 className="text-black dark:text-white text-xl font-bold">Minhas Disciplinas</h3>
+                <button className="text-sm font-semibold text-gray-500 hover:text-black dark:hover:text-white transition-colors">Ver todas</button>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -847,26 +1312,26 @@ const Dashboard = ({ user, progress, onSelectDiscipline, onNavigate, onLogout }:
                    const pct = allTechs.length === 0 ? 0 : Math.round((completed/allTechs.length)*100);
 
                    return (
-                     <article key={discipline.id} onClick={() => onSelectDiscipline(discipline)} className="bg-card-gray rounded-2xl p-5 border border-transparent hover:border-black/20 transition-all cursor-pointer group">
+                     <article key={discipline.id} onClick={() => onSelectDiscipline(discipline)} className="bg-card-gray dark:bg-white/5 rounded-2xl p-5 border border-transparent hover:border-black/20 dark:hover:border-white/20 transition-all cursor-pointer group">
                         <div className="flex gap-4">
                             <div className="w-16 h-16 shrink-0 rounded-xl bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-300" style={{backgroundImage: `url("${discipline.imageUrl}")`}}></div>
                             <div className="flex-1 flex flex-col justify-between py-0.5">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h4 className="text-black font-bold text-lg leading-tight mb-1">{discipline.name}</h4>
-                                        <p className="text-gray-500 text-xs font-medium uppercase tracking-wide">{discipline.instructor}</p>
+                                        <h4 className="text-black dark:text-white font-bold text-lg leading-tight mb-1">{discipline.name}</h4>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wide">{discipline.instructor}</p>
                                     </div>
-                                    <span className="material-symbols-outlined text-gray-400 group-hover:text-black transition-colors">arrow_forward</span>
+                                    <span className="material-symbols-outlined text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">arrow_forward</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 pt-4 border-t border-gray-200">
+                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
                             <div className="flex justify-between text-xs mb-2 font-medium">
-                                <span className="text-gray-600">Progresso</span>
-                                <span className="text-black font-bold">{pct}%</span>
+                                <span className="text-gray-600 dark:text-gray-400">Progresso</span>
+                                <span className="text-black dark:text-white font-bold">{pct}%</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                                <div className="bg-black h-1.5 rounded-full transition-all duration-500" style={{width: `${pct}%`}}></div>
+                            <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-1.5 overflow-hidden">
+                                <div className="bg-black dark:bg-white h-1.5 rounded-full transition-all duration-500" style={{width: `${pct}%`}}></div>
                             </div>
                         </div>
                      </article>
@@ -884,6 +1349,7 @@ const Dashboard = ({ user, progress, onSelectDiscipline, onNavigate, onLogout }:
 
 enum ViewState {
   LOGIN,
+  ONBOARDING,
   DASHBOARD,
   DISCIPLINE,
   LEVEL,
@@ -906,14 +1372,21 @@ export default function App() {
       const stored = localStorage.getItem(`user_${lastUserEmail}`);
       if (stored) {
         const u = JSON.parse(stored);
-        handleLogin({ email: u.email, name: u.name });
+        handleLogin(u);
       }
     }
   }, []);
 
   const handleLogin = (u: User) => {
-    setUser(u);
+    // Ensure user has default avatar if none provided from older storage
+    const userWithAvatar = {
+        ...u,
+        avatar: u.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3srA55zGUWfg8BxETBFloB9muv6M8nfCIA07QKBPEYjiTkK0Vx-3nTsexLH7ov4KJaJ_k4ZO6cyAIFp4PW4Q-sAJGrrzkJoxbDveyBUhhn5ZHmTYC9obcEj5gKIaDO1t0vsZX_gr-fwB_mHrJPjJUjA5kOE4-BEAELAnGljRYMgNlEw2IMot1Ic-LXmCsuwWB2BcF3aWdhUceKAKo6dUKf2fqNXRXsdIMcd8Z4a-iYZ7mkNGiQ_L8v7V5SP1TnGwx2W1SFlouMg'
+    };
+    setUser(userWithAvatar);
     localStorage.setItem('last_user', u.email);
+    
+    // Progress
     const savedProgress = localStorage.getItem(`progress_${u.email}`);
     if (savedProgress) {
       const loaded = JSON.parse(savedProgress);
@@ -924,13 +1397,35 @@ export default function App() {
     } else {
       setProgress({ completedTechniques: [], attendanceDates: [] });
     }
-    setCurrentView(ViewState.DASHBOARD);
+
+    // Check if profile is complete (Onboarding check)
+    if (!u.name || !u.age || !u.weight || !u.height || !u.goal) {
+        setCurrentView(ViewState.ONBOARDING);
+    } else {
+        setCurrentView(ViewState.DASHBOARD);
+    }
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('last_user');
     setCurrentView(ViewState.LOGIN);
+  };
+
+  const handleUpdateUser = (updatedData: Partial<User>) => {
+    if (!user) return;
+    const newUser = { ...user, ...updatedData };
+    setUser(newUser);
+    
+    // Merge updates with existing storage to preserve password
+    const storageKey = `user_${user.email}`;
+    const existing = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    localStorage.setItem(storageKey, JSON.stringify({ ...existing, ...updatedData }));
+  };
+
+  const handleOnboardingComplete = (data: Partial<User>) => {
+      handleUpdateUser(data);
+      setCurrentView(ViewState.DASHBOARD);
   };
 
   const updateProgress = (techId: string) => {
@@ -974,11 +1469,12 @@ export default function App() {
   };
 
   if (currentView === ViewState.LOGIN) return <LoginView onLogin={handleLogin} />;
+  if (currentView === ViewState.ONBOARDING && user) return <OnboardingView user={user} onComplete={handleOnboardingComplete} />;
   if (currentView === ViewState.DASHBOARD && user) return <Dashboard user={user} progress={progress} onSelectDiscipline={goToDiscipline} onNavigate={setCurrentView} onLogout={handleLogout} />;
   if (currentView === ViewState.ATTENDANCE) return <AttendanceView progress={progress} onNavigate={setCurrentView} onCheckIn={markAttendance} />;
   if (currentView === ViewState.SCHEDULE) return <ScheduleView onNavigate={setCurrentView} />;
-  if (currentView === ViewState.EVOLUTION) return <EvolutionView progress={progress} onNavigate={setCurrentView} />;
-  if (currentView === ViewState.PROFILE && user) return <ProfileView user={user} onLogout={handleLogout} onNavigate={setCurrentView} />;
+  if (currentView === ViewState.EVOLUTION && user) return <EvolutionView user={user} progress={progress} onNavigate={setCurrentView} />;
+  if (currentView === ViewState.PROFILE && user) return <ProfileView user={user} onLogout={handleLogout} onNavigate={setCurrentView} onUpdateUser={handleUpdateUser} />;
   if (currentView === ViewState.DISCIPLINE && selectedDiscipline) return <DisciplineView discipline={selectedDiscipline} progress={progress} onBack={() => setCurrentView(ViewState.DASHBOARD)} onSelectLevel={goToLevel} />;
   if (currentView === ViewState.LEVEL && selectedLevel && selectedDiscipline) return <LevelView level={selectedLevel} disciplineName={selectedDiscipline.name} progress={progress} onBack={() => setCurrentView(ViewState.DISCIPLINE)} onToggleTechnique={updateProgress} />;
 
