@@ -598,7 +598,12 @@ const LevelView = ({ level, disciplineName, progress, onBack, onToggleTechnique 
     setActiveTechnique(tech);
     setAiResponse(null);
     setLoadingAi(true);
-    const response = await askSensei(tech.title, disciplineName);
+
+    const uncompletedTechs = level.techniques
+      .filter((t: Technique) => !progress.completedTechniques.includes(t.id))
+      .map((t: Technique) => t.title);
+      
+    const response = await askSensei(tech.title, disciplineName, pct, uncompletedTechs);
     setAiResponse(response);
     setLoadingAi(false);
   };

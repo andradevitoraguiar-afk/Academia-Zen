@@ -114,25 +114,56 @@ export const DISCIPLINES: Discipline[] = [
         id: 'bjj-blue',
         name: 'Faixa Azul',
         color: 'bg-blue-600',
-        description: 'Desenvolvimento técnico e guardas avançadas.',
+        description: 'Programa completo do Exame de Faixa Azul.',
         progress: 10,
         techniques: [
-          { 
-            id: 't-bjj-b-1', 
-            title: 'Raspagem De La Riva', 
-            category: 'Guarda',
-            description: 'Controle usando o gancho na perna do oponente.', 
-            tips: [],
-            videoUrl: 'https://www.youtube.com/results?search_query=jiu+jitsu+raspagem+de+la+riva+tutorial'
-          },
-          { 
-            id: 't-bjj-b-2', 
-            title: 'Kimura', 
-            category: 'Finalização',
-            description: 'Chave de ombro dupla.', 
-            tips: [],
-            videoUrl: 'https://www.youtube.com/results?search_query=jiu+jitsu+kimura+tutorial'
-          },
+          // 1. Fundamentos e Movimentação
+          { id: 'bjj-blue-f-1', category: 'Fundamentos', title: 'Rolamentos e Saídas', description: 'Rolamento de frente, Rolamento de costas, Saída de quadril.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-2', category: 'Fundamentos', title: 'Base e Conexão', description: 'Base 4 lados, Base 90º com conexão (frente e trás - Kimono e Clinch lateral), Guarda alta com conexão.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-3', category: 'Fundamentos', title: 'Movimentação em Pé', description: 'Andar em base, Giro 90º, Andar em volta do oponente.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-4', category: 'Fundamentos', title: 'Aprender a Cair', description: 'Lateral, Para trás, Para frente, Levantada técnica.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-5', category: 'Fundamentos', title: 'Controle de Distância', description: 'Pisão Lateral, Jab/direto, Movimentação de Pernas.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-6', category: 'Fundamentos', title: 'Respiração', description: 'Fole, Completa, Entendimento da respiração baixa x alta.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-f-7', category: 'Fundamentos', title: 'Regras de Ouro da Defesa', description: 'Guarda Alta e Passo Atrás, Mãos Sempre pelo Meio, Empurrão para Ganhar Distância.', tips: [], videoUrl: '' },
+
+          // 2. Defesa Pessoal
+          { id: 'bjj-blue-dp-1', category: 'Defesa Pessoal', title: 'Defesas Fundamentais', description: 'Defesa de empurrão (1 e 2 mãos), Pegadas (Gola, Punho, Calça).', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-2', category: 'Defesa Pessoal', title: 'Ida para as Costas em Pé', description: 'Mão no peito, Por baixo do braço, Arm drag, Girando pelos ombros.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-3', category: 'Defesa Pessoal', title: 'Defesas em Pé (Frente) I', description: 'Contra enforcamento (mãos/quadril), Saídas de pulso, Gravata (em pé, com soco, inclinado).', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-4', category: 'Defesa Pessoal', title: 'Defesas em Pé (Frente) II', description: 'Pegadas na gola ("mão de vaca", polegar, torcendo), Pegada de ombro.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-5', category: 'Defesa Pessoal', title: 'Defesas em Pé (Frente) III', description: 'Contra baiana, Guilhotina, Agarramentos (baixo/cima), Ameaça na garganta.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-6', category: 'Defesa Pessoal', title: 'Defesas de Agressão', description: 'Contra soco/tapa (perto/longe), Empurrão no peito, Pisão, Chute lateral.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-7', category: 'Defesa Pessoal', title: 'Defesas Contra Parede', description: 'Golpes de costas, Chute reto, Enforcamento, Mão no pescoço, Empurrão, Gravata.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-8', category: 'Defesa Pessoal', title: 'Mata Leão e Gravatas', description: 'Saída da gravata em pé (4 variações), Defesa de Mata Leão (2 variações).', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-dp-9', category: 'Defesa Pessoal', title: 'Defesas pelas Costas', description: 'Agarramentos (cima/baixo), Gravata (puxado p/ trás), Chave cervical, Enforcamento.', tips: [], videoUrl: '' },
+
+          // 3. Clinch e Quedas
+          { id: 'bjj-blue-q-1', category: 'Quedas', title: 'Clinch Básico', description: 'Tipos de Pegada, Tipos de Abraçada, Cinturada.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-q-2', category: 'Quedas', title: 'Quedas Principais', description: 'Queda de Gancho, O soto gari, Baiana.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-q-3', category: 'Quedas', title: 'Defesa de Tapa', description: 'Com queda de quadril e chave de braço.', tips: [], videoUrl: '' },
+
+          // 4. Chão - Passagem
+          { id: 'bjj-blue-p-1', category: 'Passagem', title: 'Passagens Abertas', description: 'Tradicional (joelho/em pé), Afundando o Joelho, Guarda Aranha.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-p-2', category: 'Passagem', title: 'Passagens Justas', description: '2 mãos por baixo das pernas, Joelho Cruzado, Meia Guarda (duas passagens).', tips: [], videoUrl: '' },
+
+          // 5. Chão - Ataque e Controle
+          { id: 'bjj-blue-c-1', category: 'Controle', title: '100kg (Atravessada)', description: 'Ataques: Pescoço, Chave de braço, Americana. Transições para montada e joelho na barriga.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-c-2', category: 'Controle', title: 'Joelho na Barriga', description: 'Chave de braço, Montada, Estrangulamento.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-c-3', category: 'Controle', title: 'Montada (Manutenção)', description: 'Defesa de mão no peito, joelhos, quadril e empurrão lateral.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-c-4', category: 'Controle', title: 'Montada (Finalizações)', description: 'Chave de braço, Estrangulamento, Ataque duplo, Americana, Montada Lateral.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-c-5', category: 'Defesa no Solo', title: 'Saída de Montada', description: 'Upa, Saída de cotovelo, Saída Relson.', tips: [], videoUrl: '' },
+
+          // 6. Chão - Guarda
+          { id: 'bjj-blue-g-1', category: 'Guarda', title: 'Finalizações da Guarda', description: 'Chave de braço, Triângulo, Estrangulamento, Ataque duplo.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-g-2', category: 'Guarda', title: 'Raspagens', description: 'Tesoura (c/ e s/ gancho), Quadril (c/ e s/ guilhotina), Guarda aberta (pêndulo/chave de braço).', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-g-3', category: 'Guarda', title: 'Combinações', description: 'Raspagem com finalização, Ataque pescoço e braço, Ataque braço e costas.', tips: [], videoUrl: '' },
+
+          // 7. Meia Guarda e Costas
+          { id: 'bjj-blue-m-1', category: 'Meia Guarda', title: 'Ataques da Meia', description: 'Raspagem de gancho, Ida para as costas.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-m-2', category: 'Meia Guarda', title: 'Defesa de Meia', description: 'Posicionamento das mãos, Conexão joelho/cotovelo, Reposição.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-costas-1', category: 'Costas', title: 'Ida para as Costas', description: 'A partir da guarda (cruzando braço e esgrimando).', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-costas-2', category: 'Costas', title: 'Saída das Costas', description: 'Defesa do pescoço, Escolha do lado, Saída de Ponte.', tips: [], videoUrl: '' },
+          { id: 'bjj-blue-costas-3', category: 'Costas', title: 'Ataques das Costas', description: 'Pescoço (2), Ataque braço, Arco e flecha.', tips: [], videoUrl: '' },
         ]
       },
       {
